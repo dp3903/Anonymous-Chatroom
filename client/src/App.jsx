@@ -6,7 +6,7 @@ import './App.css'
 function App() {
   const [message, setMessage] = useState("Connecting to server...");
   useEffect(()=>{
-    fetch('http://localhost:3000/',{
+    fetch('https://anonymous-chatroom-server.vercel.app/',{
         method: "GET",
         mode: "cors",  // Change the mode to CORS  
       }).then(
