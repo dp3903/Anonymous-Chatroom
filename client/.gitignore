@@ -7,7 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+<<<<<<< HEAD
 /node_modules
+=======
+node_modules
+>>>>>>> f004cb37241792bbf86e70ac79720f6feb5c541c
 dist
 dist-ssr
 *.local
