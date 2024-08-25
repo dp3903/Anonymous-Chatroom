@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-<<<<<<< HEAD
 
 // connect to database
 const connectDB = require('./db/connect');
@@ -9,8 +8,6 @@ const connectDB = require('./db/connect');
 // config .env file
 require('dotenv').config();
 
-=======
->>>>>>> f004cb37241792bbf86e70ac79720f6feb5c541c
 const PORT = 3000;
 
 app.use(cors());
@@ -24,7 +21,6 @@ app.use('/',(req,res,next)=>{
     );
 });
 
-<<<<<<< HEAD
 const start = async () => {
     try {
         await connectDB(process.env.Mongodb_Connection_String);
@@ -39,8 +35,3 @@ const start = async () => {
 }
 
 start();
-=======
-app.listen(PORT,()=>{
-    console.log(`Server started at http://localhost:${PORT}`);
-})
->>>>>>> f004cb37241792bbf86e70ac79720f6feb5c541c
