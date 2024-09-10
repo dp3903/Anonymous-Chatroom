@@ -1,37 +1,24 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import CreateRoom from './pages/createRoom'
+import JoinRoom from './pages/joinRoom'
+import Home from './pages/Home'
+import ChatRoom from './pages/ChatRoom'
 
 function App() {
-  const [message, setMessage] = useState("Connecting to server...");
-  useEffect(()=>{
-    fetch('https://anonymous-chatroom-server.vercel.app/',{
-        method: "GET",
-        mode: "cors",  // Change the mode to CORS  
-      }).then(
-        (res) =>{
-          return res.json();
-        }
-      ).then(
-        (data) => {
-          console.log(data);
-          setMessage(data.message);
-        }
-      ).catch(
-        (err) => {
-          console.log(err);
-          setMessage("Could not connect to server");
-        }
-      )
-  },[]);
-
+  
   return (
-    <>
-      <div className="test">
-        {message}
-      </div>
-    </>
+    
+        <Router>
+          <Routes>
+            <Route path='/createRoom' element={<CreateRoom/>} />
+            <Route path='/joinRoom' element={<JoinRoom/>} />
+            <Route path='/chatRoom' element={<ChatRoom/>} />
+            <Route path='/' element={<Home/>} />
+          </Routes>
+        </Router>
+      
   )
 }
 
