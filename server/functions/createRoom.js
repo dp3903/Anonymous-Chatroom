@@ -7,7 +7,7 @@ const createRoom = async (req,res,next)=>{
         const { name,creator } = req.body;
         room = new ChatRoom({
             name,
-            members: [creator],
+            members: [],
         });
         await room.save();
     }
@@ -25,4 +25,4 @@ const createRoom = async (req,res,next)=>{
     });
 }
 
-exports.createRoom = createRoom;
+module.exports = createRoom;

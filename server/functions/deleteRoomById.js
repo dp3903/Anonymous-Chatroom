@@ -1,23 +1,18 @@
 const ChatRoom = require('../models/chatRoom');
 
-const deleteRoomById = async (req,res,next)=>{
+const deleteRoomById = async (roomId)=>{
     let room;
     try{
-        console.log("deleting room with id = "+req.body.roomId);
-        room = await ChatRoom.findByIdAndDelete(req.body.roomId);
+        console.log("deleting room with id = "+roomId);
+        room = await ChatRoom.findByIdAndDelete(roomId);
     }
     catch(e){
-        return next(e)
+        throw e;
     }
     if(room == null){
-        return res.json({
-            error: "Room not found."
-        })
+        throw new error("no room found.");
     }
-    res.json({
-        message: "Room successfully deleted.",
-        Room: room
-    });
+    return 0;
 }
 
-exports.deleteRoomById = deleteRoomById;
+module.exports = deleteRoomById;

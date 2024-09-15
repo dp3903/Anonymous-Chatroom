@@ -11,8 +11,10 @@ const saveMessage = async (roomId,sender,data)=>{
         message.save();
     }
     catch(e){
-        throw new Error("message could not be saved.\nError: "+e.message);
+        throw e;
     }
+
+    return 0;
 
 }
 

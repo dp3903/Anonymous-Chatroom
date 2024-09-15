@@ -19,4 +19,4 @@ const getRoomById = async (req,res,next)=>{
     });
 }
 
-exports.getRoomById = getRoomById;
+module.exports = getRoomById;

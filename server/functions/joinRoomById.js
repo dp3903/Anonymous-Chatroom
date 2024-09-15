@@ -1,26 +1,24 @@
 const ChatRoom = require('../models/chatRoom');
 
-const joinRoomById = async (req,res,next)=>{
+const joinRoomById = async (user,roomId)=>{
+    if(!(roomId && user)){
+        return -1;
+    }
     let room;
     try{
-        console.log("joining room with id = "+req.body.roomId);
-        console.log("user = "+req.body.user);
-        room = await ChatRoom.findById(req.body.roomId);
-        room.members.push(req.body.user);
+        console.log("joining room with id = "+roomId);
+        console.log("user = "+user);
+        room = await ChatRoom.findById(roomId);
+        if(room == null){
+            throw new error("no such room.")
+        }
+        room.members.push(user);
         await room.save();
     }
     catch(e){
-        return next(e)
+        throw e;
     }
-    if(room == null){
-        return res.json({
-            error: "Room not found."
-        })
-    }
-    res.json({
-        message: "Room joined successfully.",
-        Room: room
-    });
+    return 0;
 }
 
 module.exports = joinRoomById;

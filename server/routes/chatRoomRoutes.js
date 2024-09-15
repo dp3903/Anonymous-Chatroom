@@ -27,7 +27,7 @@ router.get(
             .isLength({min: 6, max: 6}),
     ],
     errorhadler,
-    getRoomById.getRoomById
+    getRoomById
 );
 
 router.post(
@@ -41,7 +41,7 @@ router.post(
             .isEmpty(),
     ],
     errorhadler,
-    createRoom.createRoom
+    createRoom
 );
 
 // Not a user functionality but works
@@ -58,34 +58,34 @@ router.post(
 //     deleteRoomById.deleteRoomById
 // )
 
-router.post(
-    '/joinRoom',
-    [
-        check('roomId')
-            .not()
-            .isEmpty()
-            .isLength({min: 6, max: 6}),
-        check('user')
-            .not()
-            .isEmpty(),
-    ],
-    errorhadler,
-    joinRoom
-)
+// router.post(
+//     '/joinRoom',
+//     [
+//         check('roomId')
+//             .not()
+//             .isEmpty()
+//             .isLength({min: 6, max: 6}),
+//         check('user')
+//             .not()
+//             .isEmpty(),
+//     ],
+//     errorhadler,
+//     joinRoom
+// )
 
-router.post(
-    '/leaveRoom',
-    [
-        check('roomId')
-            .not()
-            .isEmpty()
-            .isLength({min: 6, max: 6}),
-        check('user')
-            .not()
-            .isEmpty(),
-    ],
-    errorhadler,
-    leaveRoom
-)
+// router.post(
+//     '/leaveRoom',
+//     [
+//         check('roomId')
+//             .not()
+//             .isEmpty()
+//             .isLength({min: 6, max: 6}),
+//         check('user')
+//             .not()
+//             .isEmpty(),
+//     ],
+//     errorhadler,
+//     leaveRoom
+// )
 
 module.exports = router;

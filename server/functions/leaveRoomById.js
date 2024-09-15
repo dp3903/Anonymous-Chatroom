@@ -1,26 +1,30 @@
 const ChatRoom = require('../models/chatRoom');
+const deleteRoomById = require('./deleteRoomById');
 
-const leaveRoomById = async (req,res,next)=>{
+const leaveRoomById = async (roomId, user)=>{
+    if(!(roomId && user)){
+        return -1;
+    }
     let room;
     try{
-        console.log("leaving room with id = "+req.body.roomId);
-        console.log("user = "+req.body.user);
-        room = await ChatRoom.findById(req.body.roomId);
-        room.members.pull(req.body.user);
+        console.log("leaving room with id = "+roomId);
+        console.log("user = "+user);
+        room = await ChatRoom.findById(roomId);
+        if(room == null){
+            throw new error("no room found.")
+        }
+        room.members.pull(user);
         await room.save();
+        if(room.members.length == 0){
+            await deleteRoomById(roomId);
+        }
     }
     catch(e){
-        return next(e)
+        console.log("some error occured: "+e.message);
+        throw e;
     }
-    if(room == null){
-        return res.json({
-            error: "Room not found."
-        })
-    }
-    res.json({
-        message: "Room left successfully.",
-        Room: room
-    });
+    
+    return 0;
 }
 
 module.exports = leaveRoomById;
