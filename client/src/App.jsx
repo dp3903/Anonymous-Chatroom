@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import viteLogo from '/vite.svg'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import CreateRoom from './pages/createRoom'
-import JoinRoom from './pages/joinRoom'
+import CreateRoom from './pages/CreateRoom'
+import JoinRoom from './pages/JoinRoom'
 import Home from './pages/Home'
 import ChatRoom from './pages/ChatRoom'
 
