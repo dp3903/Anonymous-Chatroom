@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server,{
     cors: {
-        origin: ["http://localhost:5000", "http://127.0.0.1:5000", "https://anonymous-chatroom-client-m0kxzjqtr-dp3903s-projects.vercel.app/"]
+        origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://anonymous-chatroom-client-m0kxzjqtr-dp3903s-projects.vercel.app/"]
     }
 });
 

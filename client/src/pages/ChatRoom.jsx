@@ -1,7 +1,91 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
+import { useLocation,useNavigate } from 'react-router-dom';
 import styles from './ChatRoom.module.css'
+import { io } from 'socket.io-client';
+
 
 function ChatRoom() {
+
+  const navigate = useNavigate();
+
+  const [error,setError] = useState('');
+  const [messages,setMessages] = useState([]);
+  const [members,setMembers] = useState([]);
+  let roomName;
+
+  const location = useLocation();
+  const { user,roomId } = location.state || {};
+
+  useEffect(()=>{
+    // console.log(user);
+    // console.log(roomId);
+    if(!location.state){
+      navigate('/');
+    }
+
+    
+    const socket = io('http://localhost:3000',{
+      query: {
+        user,
+        roomId
+      }
+    });
+
+    fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(
+      (response) => {
+        if(!response.ok){
+          const reader = response.body.getReader(); // Access the ReadableStream
+          const decoder = new TextDecoder(); // Decodes the binary data into text (useful for text streams)
+          let e = "";
+            // Function to read chunks of data
+          function readChunk({ done, value }) {
+            if (done) {
+              // console.log('Stream complete');
+              // console.log(e);
+              throw JSON.parse(e);
+            }
+            // Process the chunk (e.g., append to a file, update UI, etc.)
+            const chunkText = decoder.decode(value, { stream: true });
+            e += chunkText;
+            // Read the next chunk
+            return reader.read().then(readChunk);
+          }
+          // Start reading the stream
+          return reader.read().then(readChunk);
+        
+        }
+        return response.json();
+      }
+    ).then(
+      (data) => {
+        // console.log(data);
+        roomName = data.Room.name;
+        setMembers(data.Room.members);
+        // console.log(members);
+        setMessages(data.Messages);
+        // console.log(messages);
+        
+        setError('');
+      }
+    ).catch(
+      (e) => {
+        setError(e.error);
+        // console.log("Error: ");
+        // console.log(e);
+      }
+    );
+
+    return ()=>{
+      socket.emit("predisconnect",{ roomId, user });
+    }
+
+  },[]);
+
   return (
     <div className={styles.body}>
       <div className={styles.sidebar}>
@@ -23,81 +107,30 @@ function ChatRoom() {
             </b>
         </div>
         <div className={styles.roomname}>
-            My Room-123
+            {roomName}
         </div>
         <div className={styles.roomcode}>
-            Code: Ab12xY2
+            Code: {roomId}
         </div>
         <h3 className={styles.userheader}>
             Users:
         </h3>
         <ul className={styles.users}>
-            <li className={styles.user}>u1</li>
-            <li className={styles.user}>u2</li>
-            <li className={styles.user}>u3</li>
-            <li className={styles.user}>u4</li>
-            <li className={styles.user}>u5</li>
-            <li className={styles.user}>u5</li>
-            <li className={styles.user}>u5</li>
-            <li className={styles.user}>u5</li>
-            <li className={styles.user}>u5</li>
-            <li className={styles.user}>u5</li>
-            <li className={styles.user}>u5</li>
+            {members.map(item => {
+              return <li key={item} >{item}</li>
+            })}
         </ul>
     </div>
     <div className={styles.chatpanel}>
         <div className={styles.chats} id={styles.chats}>
-            <div className={styles.self}>
-                Hey, did you catch the game last night?
-              </div>
-              <div className={styles.other}>
-                No, I missed it. How did it go?
-              </div>
-              <div className={styles.self}>
-                It was intense! Went into overtime and we won by a buzzer-beater.
-              </div>
-              <div className={styles.other}>
-                Wow, that sounds exciting! I wish I could've seen it.
-              </div>
-              <div className={styles.self}>
-                Yeah, it was one of those games you don't forget easily.
-              </div>
-              <div className={styles.self}>
-                By the way, have you decided on your vacation plans yet?
-              </div>
-              <div className={styles.other}>
-                Not yet. I'm still looking at a few options.
-              </div>
-              <div className={styles.other}>
-                Do you have any recommendations?
-              </div>
-              <div className={styles.self}>
-                Well, I've heard great things about Italy if you're into history and culture.
-              </div>
-              <div className={styles.self}>
-                Or if you prefer something more adventurous, Iceland is amazing for outdoor activities.
-              </div>
-              <div className={styles.other}>
-                Both sound fantastic! I'll definitely consider them. Thanks!
-              </div>
-              <div className={styles.other}>
-                Speaking of vacations, have you ever been to Southeast Asia?
-              </div>
-              <div className={styles.self}>
-                No, not yet. What's it like there?
-              </div>
-              <div className={styles.other}>
-                It's incredible! The beaches, the food, the temples—everything is so vibrant and rich in culture.
-              </div>
-              <div className={styles.self}>
-                That sounds amazing! Any particular country you recommend?
-              </div>
-              <div className={styles.other}>
-                Thailand is a must-visit for its beaches and bustling markets. Vietnam is great for its history and landscapes too.
-              </div>
-              <div className={styles.self}>
-                I'll definitely add them to my list. Thanks for the tips!
-              </div>
+            
+            {messages.map(item => {
+              if(item.sender == user){
+                return <div key={item.id} className={styles.self} >{item.data}</div>
+              }
+              return <div key={item.id} className={styles.other} >{item.data}</div>
+              
+            })}
                             
         </div>
         <div className={styles.sender}>

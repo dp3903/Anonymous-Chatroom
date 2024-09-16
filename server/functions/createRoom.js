@@ -12,11 +12,13 @@ const createRoom = async (req,res,next)=>{
         await room.save();
     }
     catch(e){
-        e.message = "Could not create new chatroom. probably room with the same name exists. try again with a different name."
-        return next(e)
+        console.log(e.message);
+        return res.status(500).json({
+            error: "Could not create new chatroom. probably room with the same name exists. try again with a different name."
+        })
     }
     if(room == null){
-        return res.json({
+        return res.status(500).json({
             error: "Room could not be created. please try again."
         })
     }
