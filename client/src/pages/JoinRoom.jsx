@@ -13,7 +13,9 @@ function JoinRoom() {
     const join = (event) => {
         event.preventDefault();
 
-        fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${code}`, {
+        fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
+      // fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development 
+        {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

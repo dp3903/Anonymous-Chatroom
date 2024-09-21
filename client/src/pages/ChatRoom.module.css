@@ -56,6 +56,17 @@
     font-size: x-large;
 }
 
+.leavebtn{
+    width: 80%;
+    height: 50px;
+    padding: 10px;
+    border-radius: 4px;
+}
+.leavebtn::before{
+    content: none;
+    display: none;
+}
+
 .userheader{
     margin: 10px;
     border-bottom: 1px solid grey;

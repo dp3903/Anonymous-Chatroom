@@ -16,7 +16,10 @@ function CreateRoom() {
       name: room,
       creator: user
     };
-    fetch('http://localhost:3000/AnonymousChatroom/createRoom', {
+
+    fetch('https://anonymous-chatroom-server.vercel.app/createRoom',   //production
+    // fetch('http://localhost:3000/AnonymousChatroom/createRoom',  //development
+    {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

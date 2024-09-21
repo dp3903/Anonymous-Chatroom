@@ -2,8 +2,9 @@ const ChatRoom = require('../models/chatRoom');
 const Messages = require('../models/messages');
 
 const saveMessage = async (roomId,sender,data)=>{
+    let message;
     try{
-        let message = new Messages({
+        message = new Messages({
             roomId,
             sender,
             data,
@@ -14,7 +15,7 @@ const saveMessage = async (roomId,sender,data)=>{
         throw e;
     }
 
-    return 0;
+    return message;
 
 }
 
