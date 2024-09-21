@@ -13,8 +13,8 @@ function JoinRoom() {
     const join = (event) => {
         event.preventDefault();
 
-        fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
-      // fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development 
+        fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${code}`,  //production
+      // fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${code}`,  //development 
         {
           method: 'GET',
           headers: {
