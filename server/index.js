@@ -4,9 +4,29 @@ const http = require('http');
 const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
+
+const allowedOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1 || (origin.endsWith('-dp3903s-projects.vercel.app/') && origin.startsWith('https://anonymous-chatroom-client-'))) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST'],
+};
+
 const io = socketIO(server,{
     cors: {
-        origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://anonymous-chatroom-client-ps0fa8sji-dp3903s-projects.vercel.app/"]
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.indexOf(origin) !== -1 || (origin.endsWith('-dp3903s-projects.vercel.app/') && origin.startsWith('https://anonymous-chatroom-client-'))) {
+              callback(null, true);
+            } else {
+              callback(new Error('Not allowed by CORS'));
+            }
+        },
     }
 });
 
@@ -23,7 +43,7 @@ const SocketEvents = require('./routes/SocketEvents');
 
 const PORT = 3000;
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/AnonymousChatroom',chatRoomRoutes);
