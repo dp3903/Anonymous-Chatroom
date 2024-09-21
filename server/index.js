@@ -14,7 +14,9 @@ const corsOptions = {
 
 const io = socketIO(server,{
     cors: {
-        origin: '*'
+        origin: '*',
+        methods: ["GET", "POST"],
+        transports: ['websocket', 'polling']    // Fall back to polling if WebSocket fails
     }
 });
 
