@@ -27,8 +27,8 @@ function ChatRoom() {
     
     // if(!hasMounted.current){
     //   hasMounted.current = true;
-      const socket = io('https://anonymous-chatroom-server.vercel.app', //production
-      // const socket = io('http://localhost:3000', //development
+      // const socket = io('https://anonymous-chatroom-server.vercel.app', //production
+      const socket = io('http://localhost:3000', //development
       {
         query: {
           user,
@@ -42,8 +42,8 @@ function ChatRoom() {
       }
       // console.log(user);
       // console.log(roomId);
-      fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
-      // fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
+      // fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
+      fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       {
         method: 'GET',
         headers: {
