@@ -18,7 +18,8 @@ function CreateRoom() {
     };
 
     // fetch('https://anonymous-chatroom-server.vercel.app/createRoom',   //production
-    fetch('http://localhost:3000/AnonymousChatroom/createRoom',  //development
+    // fetch('http://localhost:3000/AnonymousChatroom/createRoom',  //development
+    fetch('http://192.168.155.35:3000/AnonymousChatroom/createRoom',  //development
     {
       method: 'POST',
       headers: {

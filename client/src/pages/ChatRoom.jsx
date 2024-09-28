@@ -28,7 +28,8 @@ function ChatRoom() {
     // if(!hasMounted.current){
     //   hasMounted.current = true;
       // const socket = io('https://anonymous-chatroom-server.vercel.app', //production
-      const socket = io('http://localhost:3000', //development
+      // const socket = io('http://localhost:3000', //development
+      const socket = io('http://192.168.155.35:3000', //development
       {
         query: {
           user,
@@ -37,13 +38,15 @@ function ChatRoom() {
         autoConnect: false,
       });
 
-      if(!location.state){
-        navigate('/');
-      }
+      // if(!location.state){
+      //   navigate('/');
+      // }
+
       // console.log(user);
       // console.log(roomId);
       // fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
-      fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
+      // fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
+      fetch(`http://192.168.155.35:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       {
         method: 'GET',
         headers: {
@@ -135,11 +138,12 @@ function ChatRoom() {
     navigate('/');
   }
 
-  const onSend = ()=>{
+  const onSend = (e)=>{
+    e.preventDefault();
     console.log("sending...");
     console.log(message);
     send(message);
-    // setMessage('');
+    setMessage('');
   }
 
   return (
@@ -157,16 +161,16 @@ function ChatRoom() {
                 </b>
             </div>
         </div>
-        <div className={styles.header}>
+        <div className={styles.header + " " + styles.outerheader}>
             <b>
                 Anonymous Chatroom
             </b>
         </div>
         <div className={styles.roomname}>
-            {roomName}
+            {roomName || "MyRoom"}
         </div>
         <div className={styles.roomcode}>
-            Code: {roomId}
+            Code: {roomId || "abcdef"}
         </div>
         <div>
           <button className={styles.leavebtn} onClick={()=>leavebtn()}>Leave</button>
@@ -192,11 +196,11 @@ function ChatRoom() {
             })}
                             
         </div>
-        <div className={styles.sender}>
-            <button id={styles.send} onClick={onSend}>&gt;</button>
+        <form onSubmit={onSend} className={styles.sender}>
+            <button type='submit' id={styles.send} onClick={onSend}>&gt;</button>
             <div className={styles.divider}></div>
             <input type={styles.text} value={message} onChange={(e)=>setMessage(e.target.value)} id={styles.message}/>
-        </div>
+        </form>
     </div>
     </div>
   )

@@ -13,6 +13,7 @@
 
 .sidebar{
     width: calc(20% - 20px);
+    min-width: fit-content;
     height: calc(100% - 20px);
     margin: 10px;
     background-color: #202020;
@@ -219,20 +220,17 @@
 @media only screen and (max-width:700px) {
     .sidebar{
         content:"";
-        /* color: aliceblue; */
-        /* background-color: aliceblue; */
         border-bottom: 10px solid black;
-        margin-top: 30px;
         border-radius: 0;
         width: calc(100% - 20px);
         height: fit-content;
         font-size: 0;
         position: absolute;
-        /* z-index: 1; */
+        z-index: 1;
         transition: all .3s;
     }
     
-    .sidebar *{
+    .sidebar > *{
         display: none;
     }
     
@@ -241,11 +239,14 @@
         margin: 0;
         display: flex;
         flex-direction: row;
-        /* flex-wrap: nowrap; */
         text-wrap: wrap;
-        justify-content: space-between;
+        /* justify-content: space-between; */
         font-size: initial;
-        height: 30px;
+        /* background-color: aliceblue; */
+        height: fit-content;
+        ::before{
+            display: none;
+        }
     }
 
     #expand *{
@@ -254,9 +255,12 @@
 
     #open{
         width: 20%;
+        max-width: 80px;
         height: 100%;
         background-color: transparent;
         border: 0;
+        margin: 0;
+        box-shadow: none;
         .burger{
             width: 100%;
             height: 33%;
@@ -270,16 +274,29 @@
         display: block;
         border: 0;
         /* height: 100%; */
-        font-size: large;
+        font-size: 30px;
         width: 80%;
+        b{
+            padding-top: 15px;
+            height: 100%;
+        }
+    }
+
+    .outerheader{
+        display: none;
     }
 
     .sidebar:focus,
     .sidebar:hover{
-        background-color: black;
+        /* background-color: white; */
         width: 40%;
         height: calc(100% - 20px);
         margin-top: 10px;
+        box-shadow: 4px 4px 20px black;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
         #expand{
             display: none;
             *{
@@ -288,6 +305,16 @@
         }
         #open{
             display: none;
+        }
+        *{
+            display: block;
+        }
+        .userheader{
+            font-size: 30px;
+            width: 90%;
+        }
+        .outerheader{
+            width: min-content;
         }
     }
 
