@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react'
-import viteLogo from '/vite.svg'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import CreateRoom from './pages/CreateRoom'
 import JoinRoom from './pages/JoinRoom'
 import Home from './pages/Home'
 import ChatRoom from './pages/ChatRoom'
+import { ChakraProvider,ColorModeScript } from '@chakra-ui/react'
+import theme from './theme';
 
 function App() {
   
   return (
-    
+      <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Router>
           <Routes>
             <Route path='/createRoom' element={<CreateRoom/>} />
@@ -18,6 +19,7 @@ function App() {
             <Route path='/' element={<Home/>} />
           </Routes>
         </Router>
+      </ChakraProvider>
       
   )
 }

@@ -1,14 +1,33 @@
-import React,{ useState,useEffect } from 'react'
+import React,{ useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import styles from './createRoom.module.css'
+import {
+  Box,
+  VStack,
+  Heading,
+  Input,
+  Button,
+  Container,
+  List,
+  ListItem,
+  ListIcon,
+  FormControl,
+  FormErrorMessage,
+  useToast,
+} from '@chakra-ui/react'
+import { InfoIcon } from 'lucide-react'
 
 function CreateRoom() {
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const [room,setRoom] = useState('');
   const [user,setUser] = useState('');
   const [error,setError] = useState('');
+
+  const handleBack = () => {
+    navigate(-1); // Goes to the previous page in the browser history
+  };
 
   const create = (event) => {
     event.preventDefault();
@@ -18,8 +37,7 @@ function CreateRoom() {
     };
 
     // fetch('https://anonymous-chatroom-server.vercel.app/createRoom',   //production
-    // fetch('http://localhost:3000/AnonymousChatroom/createRoom',  //development
-    fetch('http://192.168.155.35:3000/AnonymousChatroom/createRoom',  //development
+    fetch('http://localhost:3000/AnonymousChatroom/createRoom',  //development
     {
       method: 'POST',
       headers: {
@@ -58,41 +76,111 @@ function CreateRoom() {
       }
     ).catch(
       (e) => {
-        setError(e);
+        e = JSON.parse(e);
+        setError(e.error);
+        toast({
+          title: "An error occurred.",
+          description: "Unable to join chatroom. "+e.error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
         console.log("Error: ");
         console.log(e);
       }
     );
   }
 
+  const bgColor = 'rgb(25,25,25)'
+  const headerBgColor = 'rgb(87, 39, 163)'
+  const contentBgColor = 'black'
+
   return (
-    <div className={styles.body}>
-      <div className={styles.header}>
-        <b>
-            Anonymous Chatroom
-        </b>
-    </div>
+    <Box minHeight="100vh" bg={bgColor} display="flex" flexDirection="column">
+      <Box as="header" bg={headerBgColor} py={4} px={6} mb={8}>
+        <Heading as="h1" size="xl" color="white" textAlign="center">
+          Anonymous Chatroom
+        </Heading>
+      </Box>
 
-    <div className={styles.content}>
-        <h1 className={styles.title}>Create Room Code</h1>
-        <ul className={styles.help}>
-            <li>Name must be 3-15 characters long.</li>
-            <li>Your privacy is our priority. As such none of your precious data will be stored after the room is deleted.</li>
-            <li>Room is automatically deleted after the last active member leaves group.</li>
-            <li>Room cannot be deleted by anyone as long as any member is active, not even by the creator.</li>
-        </ul>
-        <form id={styles.roomForm} onSubmit={create}>
+      <Container color='white' maxW="container.md" flex={1}>
+        <VStack
+          spacing={6}
+          align="stretch"
+          bg={contentBgColor}
+          p={8}
+          borderRadius="lg"
+          boxShadow="md"
+        >
+          <Heading as="h2" size="lg" textAlign="center">
+            Create a Room
+          </Heading>
 
-            <input type="text" required minLength="3" maxLength="15" onChange={(e)=>setRoom(e.target.value)} placeholder="Enter Room Name" name="code" id={styles.code}/>
-            <input type="text" required minLength="3" maxLength="15" onChange={(e)=>setUser(e.target.value)} placeholder="Enter User Name" name="code" id={styles.code}/>
-            {(error != "") && error.substring(10,error.length-2)}
-            <div className={styles.buttons}>
-                <button content="Copy Code">Copy Name</button>
-                <button type="submit" content="Create Room">Create Room</button>
-            </div>
-        </form>
-    </div>
-    </div>
+          <List spacing={3}>
+            <ListItem>
+              <ListIcon as={InfoIcon} color="blue.500" />
+              The name you provide for the room must be unique.
+            </ListItem>
+            <ListItem>
+              <ListIcon as={InfoIcon} color="blue.500" />
+              Your privacy is our priority. As such none of your precious data will be stored after the room is deleted.
+            </ListItem>
+            <ListItem>
+              <ListIcon as={InfoIcon} color="blue.500" />
+              Room is automatically deleted after the last active member leaves group.
+            </ListItem>
+            <ListItem>
+              <ListIcon as={InfoIcon} color="blue.500" />
+              Room cannot be deleted by anyone as long as any member is active, not even by the creator.
+            </ListItem>
+          </List>
+
+          <form onSubmit={create}>
+            <VStack spacing={4}>
+              <FormControl isInvalid={error !== ''}>
+                <Input
+                  type="text"
+                  value={room}
+                  onChange={(e) => setRoom(e.target.value)}
+                  required
+                  minLength={3}
+                  maxLength={15}
+                  placeholder="Enter Room Name"
+                  size="lg"
+                />
+              </FormControl>
+
+              <FormControl>
+                <Input
+                  type="text"
+                  value={user}
+                  onChange={(e) => setUser(e.target.value)}
+                  required
+                  minLength={3}
+                  maxLength={15}
+                  placeholder="Enter Your Name"
+                  size="lg"
+                />
+              </FormControl>
+
+              {error && (
+                <FormErrorMessage>{error}</FormErrorMessage>
+              )}
+
+              <Box width="100%" display="flex" justifyContent="space-between">
+                <Button colorScheme="blue" onClick={handleBack} size="lg" variant='outline' width="48%">
+                  Back
+                </Button>
+                <Button bg='rgb(145, 83, 244)' size="lg" width="48%" type="submit">
+                  Create and Join
+                </Button>
+              </Box>
+              {error}
+            </VStack>
+          </form>
+        </VStack>
+      </Container>
+    </Box>
   )
 }
 
