@@ -6,13 +6,13 @@ const app = express();
 const server = http.createServer(app);
 
 const corsOptions = {
-    origin: '*',
+    origin: 'https://anonymous-chatroom-client.vercel.app',
     methods: ['GET', 'POST'],
 };
 
 const io = socketIO(server,{
     cors: {
-        origin: '*',
+        origin: 'https://anonymous-chatroom-client.vercel.app',
         methods: ["GET", "POST"],
         transports: ['websocket', 'polling']    // Fall back to polling if WebSocket fails
     }
