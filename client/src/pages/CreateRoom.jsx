@@ -36,7 +36,7 @@ function CreateRoom() {
       creator: user
     };
 
-     fetch('https://anonymous-chatroom-server.vercel.app/createRoom',   //production
+     fetch('https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/createRoom',   //production
     //fetch('http://localhost:3000/AnonymousChatroom/createRoom',  //development
     {
       method: 'POST',
