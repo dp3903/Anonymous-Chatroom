@@ -82,8 +82,8 @@ function ChatRoom() {
 
   useEffect(()=>{
     
-      // const socket = io('https://anonymous-chatroom-server.vercel.app', //production
-      const socket = io('http://localhost:3000', //development
+       const socket = io('https://anonymous-chatroom-server.vercel.app', //production
+      //const socket = io('http://localhost:3000', //development
       // const socket = io('http://192.168.155.35:3000', //development
       {
         query: {
@@ -99,8 +99,8 @@ function ChatRoom() {
 
       // console.log(user);
       // console.log(roomId);
-      // fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
-      fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
+       fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
+      //fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       // fetch(`http://192.168.155.35:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       {
         method: 'GET',
