@@ -29,7 +29,7 @@ require('dotenv').config();
 const chatRoomRoutes = require('./routes/chatRoomRoutes');
 const SocketEvents = require('./routes/SocketEvents');
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 app.use(cors(corsOptions));
 app.use(express.json());
