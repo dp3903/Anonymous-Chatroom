@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const socketIO = require('socket.io');
 const http = require('http');
 const cors = require('cors');
@@ -33,6 +34,20 @@ const PORT = process.env.PORT;
 
 app.use(cors(corsOptions));
 app.use(express.json());
+// Express session middleware
+const sessionMiddleware = session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }  // Set to true if you're using HTTPS
+});
+
+app.use(sessionMiddleware);
+// Share session middleware with Socket.io
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, socket.request.res || {}, next);
+});
+
 
 app.use('/AnonymousChatroom',chatRoomRoutes);
 io.on("connection",()=>{console.log("connected.")});

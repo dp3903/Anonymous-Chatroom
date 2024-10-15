@@ -7,12 +7,15 @@ function SocketEvents(io){
     io.on("connection", async (socket)=>{
         
         const { user,roomId } = socket.handshake.query;
-        
+        const session = socket.request.session;
         // Joining a specific room
         try{
             socket.join(roomId);
             await joinRoomById(user,roomId);
             console.log('A user connected: ' + user + " for room: " + roomId);
+            session.roomId = roomId;
+            session.user = user;
+            
         }
         catch(error){
             console.log(error);
@@ -52,6 +55,20 @@ function SocketEvents(io){
 
             socket.disconnect();
             
+        });
+
+        socket.on('disconnect',async () => {
+            console.log(`for ${session.user} in room ${session.roomId} disconnecting...`);
+            try{
+                await leaveRoomById(session.roomId,session.user);
+                console.log('User disconnected: ' + session.user);
+                io.to(roomId).emit('left', {user: session.user});
+            }
+            catch(error){
+                socket.emit("error",{error});
+                socket.disconnect();
+            }
+            session.destroy();
         });
     });
 }

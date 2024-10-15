@@ -27,29 +27,7 @@ import { Menu as MenuIcon, Send as SendIcon } from 'lucide-react';
 function ChatRoom() {
   const [error,setError] = useState('');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'User2', data: 'Hello everyone!' },
-    { id: 2, sender: 'User1', data: 'Hi there!' },
-    { id: 3, sender: 'User3', data: 'How are you all doing?' },
-    { id: 4, sender: 'User4', data: 'I\'m doing well, thanks for asking!' },
-    { id: 5, sender: 'User5', data: 'Good afternoon!' },
-    { id: 6, sender: 'User2', data: 'Has anyone seen the new movie?' },
-    { id: 7, sender: 'User3', data: 'Not yet, but I heard it\'s great!' },
-    { id: 8, sender: 'User1', data: 'I watched it yesterday. Amazing plot!' },
-    { id: 9, sender: 'User4', data: 'What\'s it called?' },
-    { id: 10, sender: 'User5', data: 'It\'s called "The Final Hour".' },
-    { id: 11, sender: 'User2', data: 'I\'ll check it out this weekend!' },
-    { id: 12, sender: 'User1', data: 'Same here. Looks interesting.' },
-    { id: 13, sender: 'User3', data: 'Anyone up for a game later?' },
-    { id: 14, sender: 'User5', data: 'Count me in!' },
-    { id: 15, sender: 'User4', data: 'I might join, depends on my work.' },
-    { id: 16, sender: 'User2', data: 'I\'ll be free after 6 PM.' },
-    { id: 17, sender: 'User1', data: 'Let\'s aim for 7 PM then?' },
-    { id: 18, sender: 'User3', data: '7 PM sounds good to me.' },
-    { id: 19, sender: 'User5', data: 'Alright, see you all at 7!' },
-    { id: 20, sender: 'User4', data: 'Looking forward to it!' }
-  ]
-  );
+  const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [roomName, setRoomName] = useState('RoomName');
   const [leave,setLeave] = useState(()=>()=>{});
@@ -71,9 +49,6 @@ function ChatRoom() {
 
   useEffect(() => {
     scrollToBottom()
-    console.log("bg="+bgColor);
-    console.log("self="+selfMessageBgColor);
-    console.log("other="+otherMessageBgColor);
   }, [messages]);
 
   const location = useLocation();
@@ -82,8 +57,8 @@ function ChatRoom() {
 
   useEffect(()=>{
     
-       const socket = io('https://anonymous-chatroom-server.vercel.app', //production
-      //const socket = io('http://localhost:3000', //development
+      //  const socket = io('https://anonymous-chatroom-server.vercel.app', //production
+      const socket = io('http://localhost:3000', //development
       // const socket = io('http://192.168.155.35:3000', //development
       {
         query: {
@@ -99,8 +74,8 @@ function ChatRoom() {
 
       // console.log(user);
       // console.log(roomId);
-       fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
-      //fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
+      //  fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
+      fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       // fetch(`http://192.168.155.35:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       {
         method: 'GET',
@@ -171,8 +146,11 @@ function ChatRoom() {
       ).catch(
         (e) => {
           setError(e.error);
-          // console.log("Error: ");
-          // console.log(e);
+          console.log("Error: ");
+          console.log(e);
+          if(e.error == "Room not found."){
+            navigate('/');
+          }
         }
       );
 
