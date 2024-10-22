@@ -76,8 +76,8 @@ function ChatRoom() {
       // console.log(user);
       // console.log(roomId);
       //  fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
-      //  fetch(`http://13.202.234.212:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
-      fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
+       fetch(`http://13.202.234.212:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
+      // fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       // fetch(`http://192.168.155.35:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       {
         method: 'GET',
