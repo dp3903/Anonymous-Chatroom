@@ -41,8 +41,9 @@ function JoinRoom() {
         });
         return;
       }
-        //  fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${code}`,  //production
-      fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${code}`,  //development 
+
+         fetch(`http://13.202.234.212:3000/AnonymousChatroom/getRoomById?roomId=${code}`,  //production
+      // fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${code}`,  //development 
         {
           method: 'GET',
           headers: {

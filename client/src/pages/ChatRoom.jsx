@@ -30,8 +30,8 @@ function ChatRoom() {
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [roomName, setRoomName] = useState('RoomName');
-  const [leave,setLeave] = useState(()=>()=>{});
   const [send,setSend] = useState(()=>()=>{});
+  const [disconnect,setDisconnect] = useState(()=>()=>{});
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const bgColor = 'rgb(25,25,25)'
@@ -58,7 +58,8 @@ function ChatRoom() {
   useEffect(()=>{
     
       //  const socket = io('https://anonymous-chatroom-server.vercel.app', //production
-      const socket = io('http://localhost:3000', //development
+       const socket = io('http://13.202.234.212:3000', //production
+      // const socket = io('http://localhost:3000', //development
       // const socket = io('http://192.168.155.35:3000', //development
       {
         query: {
@@ -75,6 +76,7 @@ function ChatRoom() {
       // console.log(user);
       // console.log(roomId);
       //  fetch(`https://anonymous-chatroom-server.vercel.app/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
+      //  fetch(`http://13.202.234.212:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //production
       fetch(`http://localhost:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       // fetch(`http://192.168.155.35:3000/AnonymousChatroom/getRoomById?roomId=${roomId}`,  //development
       {
@@ -117,12 +119,14 @@ function ChatRoom() {
           // console.log(messages);
 
           socket.connect();
-          setLeave(() => () => {
-            socket.emit("leaving",{roomId, user});
-          });
+          
           setSend(() => (message) => {
             console.log(message);
             socket.emit('chatMessage', {roomId, user, message});
+          })
+
+          setDisconnect(() => () => {
+            socket.disconnect();
           })
 
           socket.on('message',({newmess}) => {
@@ -167,7 +171,7 @@ function ChatRoom() {
   const leavebtn = () => {
     console.log("leaving");
     // console.log(socket);
-    leave();
+    disconnect();
     navigate('/');
   }
 
@@ -235,24 +239,49 @@ function ChatRoom() {
             scrollbar-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.1);
           }
         ">
-          {messages.map((item) => (
-            <Box
-              key={item.id}
-              alignSelf={item.sender === user ? 'flex-end' : 'flex-start'}
-              bg={item.sender === user ? selfMessageBgColor : otherMessageBgColor}
-              p={2}
-              borderRadius={item.sender === user ? "8px 8px 0 8px" : "8px 8px 8px 0"}
-              borderLeft={item.sender == user ? 'none' : '4px solid'}
-              borderRight={item.sender != user ? 'none' : '4px solid'}
-              borderBottom={'8px solid'}
-              borderColor={bgColor}
-              borderBottomColor={item.sender === user ? selfMessageBgColor : otherMessageBgColor}
-              maxW="70%"
-              // boxShadow={item.sender === user ? '-4px 4px 20px black' : '4px 4px 20px black'}
-            >
-              <Text>{item.data}</Text>
-            </Box>
-          ))}
+          {messages.map((item) => {
+            if (item.sender === '__$SYSTEM$__') {
+              // System message styling
+              return (
+                <Box
+                  key={item.id}
+                  alignSelf="center"  // Centered for system messages
+                  bg="gray.300"  // Light gray background for system messages
+                  p={2}
+                  borderRadius="8px"  // Slightly rounded
+                  border="2px dashed gray"  // Dashed border to indicate it's a system message
+                  borderBottom="none"
+                  maxW="60%"
+                  my={2}  // Add margin to separate system messages
+                  boxShadow="0px 4px 10px rgba(0, 0, 0, 0.1)"
+                >
+                  <Text fontSize="sm" fontWeight="bold" textAlign="center" color="gray.700">
+                    {item.data}
+                  </Text>
+                </Box>
+              );
+            }
+
+            // Regular user message styling
+            return (
+              <Box
+                key={item.id}
+                alignSelf={item.sender === user ? 'flex-end' : 'flex-start'}
+                bg={item.sender === user ? selfMessageBgColor : otherMessageBgColor}
+                p={2}
+                borderRadius={item.sender === user ? "8px 8px 0 8px" : "8px 8px 8px 0"}
+                borderLeft={item.sender === user ? 'none' : '4px solid'}
+                borderRight={item.sender !== user ? 'none' : '4px solid'}
+                borderBottom={'8px solid'}
+                borderColor={bgColor}
+                borderBottomColor={item.sender === user ? selfMessageBgColor : otherMessageBgColor}
+                maxW="70%"
+              >
+                <Text>{item.data}</Text>
+              </Box>
+            );
+          })}
+
           <div ref={messagesEndRef} />
         </VStack>
         <form onSubmit={onSend}>

@@ -12,6 +12,8 @@ function SocketEvents(io){
         try{
             socket.join(roomId);
             await joinRoomById(user,roomId);
+            let newmess = await saveMessage(roomId,'__$SYSTEM$__',`${user} has joined the room.`);
+            io.to(roomId).emit('message', {newmess});
             console.log('A user connected: ' + user + " for room: " + roomId);
             session.roomId = roomId;
             session.user = user;
@@ -45,6 +47,8 @@ function SocketEvents(io){
             console.log(`for ${user} in room ${roomId} disconnecting...`);
             try{
                 await leaveRoomById(roomId,user);
+                let newmess = await saveMessage(roomId,'__$SYSTEM$__',`${user} has left the room.`);
+                io.to(roomId).emit('message', {newmess});
                 console.log('User disconnected: ' + user);
                 io.to(roomId).emit('left', {user});
             }
@@ -61,6 +65,8 @@ function SocketEvents(io){
             console.log(`for ${session.user} in room ${session.roomId} disconnecting...`);
             try{
                 await leaveRoomById(session.roomId,session.user);
+                let newmess = await saveMessage(session.roomId,'__$SYSTEM$__',`${session.user} has left the room.`);
+                io.to(roomId).emit('message', {newmess});
                 console.log('User disconnected: ' + session.user);
                 io.to(roomId).emit('left', {user: session.user});
             }
